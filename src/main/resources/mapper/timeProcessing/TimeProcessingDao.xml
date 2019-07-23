@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mon.project.model.timeProcessing.dao.TimeProcessingDao">
+
+    <select id="findEmpByEmpno" resultType="com.mon.project.model.timeProcessing.vo.Emp" >
+        select
+            empno,ename,job,mgr,hiredate,sal,comm,deptno
+        from emp
+        where 1=1
+        and empno=#{empno}
+    </select>
+
+    <insert id="saveEmp" parameterType="com.mon.project.model.timeProcessing.vo.Emp" >
+        <selectKey keyProperty="empno" order="BEFORE" resultType="java.lang.Integer">
+            select emp_sequence.NEXTVAL from dual
+        </selectKey>
+        INSERT INTO emp
+        (
+        empno,ename,job,mgr,hiredate,sal,comm,deptno
+        )
+        VALUES
+        (
+        emp_sequence.NEXTVAL,
+        #{ename ,jdbcType=VARCHAR},
+        #{job ,jdbcType=VARCHAR},
+        #{mgr ,jdbcType=NUMERIC},
+        #{hiredate ,jdbcType=DATE},
+        #{sal ,jdbcType=NUMERIC},
+        #{comm ,jdbcType=NUMERIC},
+        #{deptno ,jdbcType=NUMERIC}
+        )
+    </insert>
+
+    <update id="updateEmp" parameterType="com.mon.project.model.timeProcessing.vo.Emp">
+        update emp
+        <set>
+            <if test="ename  != null"> ename  = #{ ename ,jdbcType=VARCHAR},</if>
+            <if test="job  != null"> job  = #{ job ,jdbcType=VARCHAR},</if>
+            <if test="mgr  != null"> mgr  = #{ mgr ,jdbcType=NUMERIC},</if>
+            <if test="hiredate  != null"> hiredate  = #{ hiredate ,jdbcType=DATE},</if>
+            <if test="sal  != null"> sal  = #{ sal ,jdbcType=NUMERIC},</if>
+            <if test="comm  != null"> comm  = #{ comm ,jdbcType=NUMERIC},</if>
+            <if test="deptno  != null"> deptno  = #{ deptno ,jdbcType=NUMERIC}</if>
+        </set>
+        where empno=#{empno}
+    </update>
+
+    <update id="updateALLEmp" parameterType="com.mon.project.model.timeProcessing.vo.Emp">
+        update emp
+        SET
+            ename  = #{ ename ,jdbcType=VARCHAR},
+            job  = #{ job ,jdbcType=VARCHAR},
+            mgr  = #{ mgr ,jdbcType=NUMERIC},
+            hiredate  = #{ hiredate ,jdbcType=DATE},
+            sal  = #{ sal ,jdbcType=NUMERIC},
+            comm  = #{ comm ,jdbcType=NUMERIC},
+            deptno  = #{ deptno ,jdbcType=NUMERIC}
+        where empno=#{empno}
+    </update>
+
+    <delete id="deleteEmpByEmpno"  parameterType="java.lang.Integer">
+        delete from emp WHERE empno=#{empno}
+    </delete>
+
+</mapper>
